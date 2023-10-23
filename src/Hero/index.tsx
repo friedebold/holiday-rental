@@ -32,7 +32,7 @@ const Hero: React.FC<Props> = ({ scrollToRef, divRef }) => {
   const borderRadius = useMotionValue(0);
 
   const position = useMotionValue("fixed");
-  const topHighlight = useMotionValue(PROGRESS_LIMIT + MARGIN);
+  const topHighlight = useMotionValue(0);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     let progress = Math.min(latest, PROGRESS_LIMIT) / PROGRESS_LIMIT;
@@ -69,7 +69,6 @@ const Hero: React.FC<Props> = ({ scrollToRef, divRef }) => {
         alignItems: "center",
         display: "flex",
         flexDirection: "column",
-        zIndex: 0,
         marginBottom: PROGRESS_LIMIT,
       }}
       ref={divRef}
@@ -83,8 +82,8 @@ const Hero: React.FC<Props> = ({ scrollToRef, divRef }) => {
           height: height,
           // left: 0,
           translateY: top,
+          zIndex: -1,
           // translateX: left,
-          zIndex: 0,
           overflow: "hidden",
         }}
         transition={{
