@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   HEADER_HEIGHT,
   HIGHLIGHT_HEIGHT,
@@ -7,57 +6,59 @@ import {
   MIN_MARGIN,
 } from "../constants";
 import Highlights from "./Highlights";
+
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import VideoBox from "./VideoBox";
 
 interface Props {
-  scrollY: number;
   scrollToRef: (refStr: string) => void;
-  divRef: any
+  divRef: any;
 }
 
-export interface Dimensions {
-  width: number | string;
-  height: number | string;
-  borderRadius: number | string;
-  left: number | string;
-  top: number | string;
-  scale: number;
-  top2: number | string;
-}
 export const PROGRESS_LIMIT = 800;
 
-const Hero: React.FC<Props> = ({ scrollY, scrollToRef, divRef }) => {
-  const [dimensions, setDimensions] = useState<Dimensions>({
-    width: "100vw",
-    height: "100vh",
-    borderRadius: 0,
-    left: 0,
-    top: 0,
-    scale: 1,
-    top2: 0,
-  });
+const Hero: React.FC<Props> = ({ scrollToRef, divRef }) => {
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    let progress = 0;
-    progress = Math.min(scrollY, PROGRESS_LIMIT) / PROGRESS_LIMIT;
+  const height = useMotionValue(window.innerHeight);
+  const width = useMotionValue(window.innerWidth);
+  const top = useMotionValue(0);
+  const left = useMotionValue(0);
+  const borderRadius = useMotionValue(0);
 
-    const width =
-      window.innerWidth -
-      (60 + Math.max(0, window.innerWidth - MAX_WIDTH)) * progress;
-    const height =
+  const position = useMotionValue("fixed");
+  const topHighlight = useMotionValue(PROGRESS_LIMIT + MARGIN);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    let progress = Math.min(latest, PROGRESS_LIMIT) / PROGRESS_LIMIT;
+
+    height.set(
       window.innerHeight -
-      (HEADER_HEIGHT + MIN_MARGIN + HIGHLIGHT_HEIGHT + MARGIN + MARGIN) *
-        progress;
-    const borderRadius = 20 * progress;
-    const left =
-      (30 + Math.max(0, (window.innerWidth - MAX_WIDTH) / 2)) * progress;
-    const top = Math.min(scrollY, PROGRESS_LIMIT) + 100 * progress;
+        (HEADER_HEIGHT + MIN_MARGIN + HIGHLIGHT_HEIGHT + MARGIN + MARGIN) *
+          progress
+    );
 
-    const scale = (window.innerWidth - 60 * progress) / window.innerWidth;
-    const top2 = Math.min(scrollY, PROGRESS_LIMIT);
+    width.set(
+      window.innerWidth -
+        (60 + Math.max(0, window.innerWidth - MAX_WIDTH)) * progress
+    );
 
-    setDimensions({ width, height, borderRadius, left, top, scale, top2 });
-  }, [scrollY]);
+    top.set(latest > PROGRESS_LIMIT ? 100 + PROGRESS_LIMIT : 100 * progress);
+
+    left.set(
+      (30 + Math.max(0, (window.innerWidth - MAX_WIDTH) / 2)) * progress
+    );
+
+    borderRadius.set(20 * progress);
+
+    topHighlight.set(latest > PROGRESS_LIMIT ? PROGRESS_LIMIT : 0);
+    position.set(latest > PROGRESS_LIMIT ? "initial" : "fixed");
+  });
 
   return (
     <div
@@ -65,28 +66,51 @@ const Hero: React.FC<Props> = ({ scrollY, scrollToRef, divRef }) => {
         margin: "0px 30px",
         paddingBottom: 30,
         height: "100vh",
-        alignItems: "stretch",
+        alignItems: "center",
         display: "flex",
         flexDirection: "column",
         zIndex: 0,
         marginBottom: PROGRESS_LIMIT,
-        
       }}
       ref={divRef}
     >
-      <VideoBox {...{ scrollY }} {...{ dimensions }} />
-      <div style={{ display: "flex", flex: 1 }}></div>
-      {/* <Spacer height={10} /> */}
-      <div
+      <motion.div
         style={{
-          top: dimensions.top,
-          transform: `translate(0px, ${dimensions.top2}px)`,
-          animation: "fadein 1s",
+          position: position,
+          display: "flex",
+          borderRadius: borderRadius,
+          width: width,
+          height: height,
+          // left: 0,
+          translateY: top,
+          // translateX: left,
+          zIndex: 0,
+          overflow: "hidden",
+        }}
+        transition={{
+          x: { type: "spring", stiffness: 100 },
+          duration: 0.8,
+          delay: 0.2,
+        }}
+      >
+        <VideoBox />
+      </motion.div>
+      <div style={{ display: "flex", flex: 1 }} />
+      <motion.div
+        style={{
+          zIndex: 1,
+          position: position,
+          bottom: MARGIN,
+          translateY: topHighlight,
+          display: "flex",
+          width:
+            window.innerWidth -
+            (60 + Math.max(0, window.innerWidth - MAX_WIDTH)),
           height: HIGHLIGHT_HEIGHT,
         }}
       >
-        <Highlights {...{ scrollToRef}} />
-      </div>
+        <Highlights {...{ scrollToRef }} />
+      </motion.div>
     </div>
   );
 };

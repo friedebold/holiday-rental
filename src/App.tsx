@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Spacer from "./Commons/Spacer";
 import Contact from "./Contact";
 import Details from "./Details";
@@ -22,20 +22,7 @@ export interface Refs {
 }
 
 const App: React.FC<Props> = ({}) => {
-  const [scrollY, setScrollY] = useState(0);
   const [openImprint, setOpenImprint] = useState(false);
-
-  const handleScroll = () => {
-    const position = window.scrollY;
-    setScrollY(position);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const refs: any = {
     home: useRef<null | HTMLDivElement>(null),
@@ -53,9 +40,9 @@ const App: React.FC<Props> = ({}) => {
     <>
       {openImprint == false ? (
         <>
-          <Header {...{ scrollY }} {...{ scrollToRef }} />
+          <Header {...{ scrollToRef }} />
           <div className="App" style={{ maxWidth: MAX_WIDTH }}>
-            <Hero {...{ scrollY }} {...{ scrollToRef }} divRef={refs["home"]} />
+            <Hero {...{ scrollToRef }} divRef={refs["home"]} />
             <Spacer height={"15vh"} />
             <Reviews />
             <Spacer height={"15vh"} />

@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import { PROGRESS_LIMIT } from "./Hero";
 import Logo from "./assets/logo.webp";
 import { APPROX_HEADER_CONTENT_WIDTH, MAX_WIDTH } from "./constants";
 
 interface Props {
-  scrollY: number;
   scrollToRef: (refStr: string) => void;
 }
 
-const Header: React.FC<Props> = ({ scrollY, scrollToRef }) => {
-  const [opacity, setOpacity] = useState(0);
+const Header: React.FC<Props> = ({ scrollToRef }) => {
+  const { scrollY } = useScroll();
+  const opacity = useMotionValue(0);
 
-  useEffect(() => {
-    setOpacity(Math.min((scrollY - PROGRESS_LIMIT) * 0.002, 0.2));
-  }, [scrollY]);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    opacity.set(Math.min((latest - PROGRESS_LIMIT) * 0.002, 0.2));
+  });
 
   return (
     <>
@@ -28,7 +33,7 @@ const Header: React.FC<Props> = ({ scrollY, scrollToRef }) => {
         className="row"
       >
         {window.innerWidth < APPROX_HEADER_CONTENT_WIDTH + MAX_WIDTH && (
-          <div
+          <motion.div
             style={{
               position: "absolute",
               backgroundColor: "black",

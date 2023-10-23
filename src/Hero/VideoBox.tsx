@@ -1,34 +1,14 @@
-import { Dimensions } from ".";
 import video from "../assets/beach.mp4";
 /* import image from "../assets/gallery/2.webp"; */
 
-interface Props {
-  scrollY: number;
-  dimensions: Dimensions;
-}
+interface Props {}
 
-const VideoBox: React.FC<Props> = ({ scrollY, dimensions }) => {
+const VideoBox: React.FC<Props> = ({}) => {
   return (
-    <div
-      style={{
-        position: "absolute",
-        display: "flex",
-        borderRadius: dimensions.borderRadius,
-        width: dimensions.width,
-        height: dimensions.height,
-        left: 0,
-        transform: `translate(${dimensions.left}px, ${dimensions.top}px)`,
-        // left: dimensions.left,
-        // top: dimensions.top,
-        zIndex: 0,
-        overflow: "hidden",
-      }}
-    >
-      <video width="100%" height="100%" autoPlay loop muted>
-        <source src={video}></source>
-      </video>
-      {/* <img src={image} height={220} /> */}
-    </div>
+    <video width="100%" height="100%" autoPlay loop muted>
+      <source src={video}></source>
+    </video>
+    /* <img src={image} height={220} /> */
   );
 };
 
