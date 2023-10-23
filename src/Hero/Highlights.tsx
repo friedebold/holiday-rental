@@ -9,11 +9,11 @@ interface Props {
   scrollToRef: (refStr: string) => void;
 }
 
-const Highlights: React.FC<Props> = ({  scrollToRef }) => {
+const Highlights: React.FC<Props> = ({ scrollToRef }) => {
   return (
     <div className="row" style={{ zIndex: 1, height: "100%" }}>
-      <div className="hero-box"  onClick={() => scrollToRef('gallery')}>
-        <h4>10 Betten</h4>
+      <div className="hero-box" onClick={() => scrollToRef("gallery")}>
+        <h4>8 Betten</h4>
         <Spacer height={30} />
         <IoBedOutline size={40} />
       </div>
@@ -28,7 +28,7 @@ const Highlights: React.FC<Props> = ({  scrollToRef }) => {
 
       <Spacer width={MIN_MARGIN} />
 
-      <div className="hero-box" onClick={() => scrollToRef('location')}>
+      <div className="hero-box" onClick={() => scrollToRef("location")}>
         <div>
           <h4>Yachthafen</h4>
           <div className="row">
