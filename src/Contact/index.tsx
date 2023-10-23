@@ -31,7 +31,7 @@ const Contact: React.FC<Props> = ({ divRef }) => {
         >
           <p>+49 1742089072</p>
           <Spacer height={MIN_MARGIN} />
-          <p>info@luxus-ferienhaus-usedom.de</p>
+          <p>b.friedebold@gmx.de</p>
         </div>
       </div>
     </Section>
