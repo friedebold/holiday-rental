@@ -4,14 +4,14 @@ import Section from "../Commons/Section";
 import Spacer from "../Commons/Spacer";
 import FirstFloor from "../assets/firstFloor.webp";
 import SecondFloor from "../assets/secondFloor.webp";
-import { MARGIN, MAX_WIDTH } from "../constants";
+import { APPROX_HEADER_CONTENT_WIDTH, MARGIN, MAX_WIDTH } from "../constants";
 import Floor from "./Floor";
 
 interface Props {
-  divRef: any
+  divRef: any;
 }
 
-const Gallery: React.FC<Props> = ({divRef}) => {
+const Gallery: React.FC<Props> = ({ divRef }) => {
   const [imgIndex, setImgIndex] = useState(0);
 
   const firstFloorPositions = [
@@ -33,6 +33,11 @@ const Gallery: React.FC<Props> = ({divRef}) => {
     { top: 0.61, left: 0.35 },
   ];
 
+  const MARGINS =
+    window.innerWidth > MAX_WIDTH + APPROX_HEADER_CONTENT_WIDTH
+      ? MARGIN * 4
+      : MARGIN * 2;
+
   return (
     <Section title="Das Haus" divRef={divRef}>
       <Floor
@@ -40,7 +45,7 @@ const Gallery: React.FC<Props> = ({divRef}) => {
         {...{ setImgIndex }}
         src={FirstFloor}
         imagePositions={firstFloorPositions}
-        containerWidth={Math.min(window.innerWidth, MAX_WIDTH) - MARGIN * 2}
+        containerWidth={Math.min(window.innerWidth, MAX_WIDTH) - MARGINS}
         aspectRatio={0.762}
       />
       <Spacer height={MARGIN} />
