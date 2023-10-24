@@ -3,12 +3,19 @@ import video from "../assets/beach.mp4";
 
 interface Props {}
 
-const VideoBox: React.FC<Props> = ({}) => {
+const VideoBox: React.FC<Props> = () => {
   return (
-    <video width="100%" height="100%" autoPlay loop muted>
+    <video
+      width="100%"
+      height="100%"
+      autoPlay
+      loop
+      muted
+      controls={false}
+      playsInline
+    >
       <source src={video}></source>
     </video>
-    /* <img src={image} height={220} /> */
   );
 };
 
