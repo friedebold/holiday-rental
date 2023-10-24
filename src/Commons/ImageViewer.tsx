@@ -1,5 +1,5 @@
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { MARGIN, MAX_WIDTH } from "../constants";
+import { APPROX_HEADER_CONTENT_WIDTH, MARGIN, MAX_WIDTH } from "../constants";
 
 interface Props {
   type: string;
@@ -15,6 +15,11 @@ const ImageViewer: React.FC<Props> = ({
   setImgIndex,
 }) => {
   let image = require(`../assets/${type}/${imgIndex}.webp`);
+
+  const MARGINS =
+    window.innerWidth > MAX_WIDTH + APPROX_HEADER_CONTENT_WIDTH
+      ? MARGIN * 4
+      : MARGIN * 2;
 
   return (
     <div className="row">
@@ -32,8 +37,8 @@ const ImageViewer: React.FC<Props> = ({
       />
       <img
         src={image}
-        width={Math.min(window.innerWidth, MAX_WIDTH) - MARGIN * 4}
-        height={(Math.min(window.innerWidth, MAX_WIDTH) - MARGIN * 4) / 1.5}
+        width={Math.min(window.innerWidth, MAX_WIDTH) - MARGINS}
+        height={(Math.min(window.innerWidth, MAX_WIDTH) - MARGINS) / 1.5}
         style={{ borderRadius: 10, objectFit: "cover" }}
       />
       <IoIosArrowForward
